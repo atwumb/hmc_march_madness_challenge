@@ -31,9 +31,6 @@ divisions = {"MW": ["Kentucky", "Kansas", "Notre Dame",
 
 def getTeam():
     bbrank = pd.read_csv(r'espn_power_rankings2.csv', dtype={'BPI': float, 'PVA': float})
-    # bbrank = pd.read_excel("espn_power_rankings2.xls")
-
-    # bbrank = rank.set_index('TEA
 
     return bbrank
 
@@ -46,18 +43,11 @@ def getCompare(team1, team2):
 
     t1_stat = team_stats.BPI[team_stats.Team == team1]
     t2_stat = team_stats.BPI[team_stats.Team == team2]
-    # print(float(t1_stat))
-    # print(float(t2_stat))
 
     t2 = np.float64(t2_stat)
     t1 = np.float64(t1_stat)
-    # elif t1_stat < t2_stat:
-    # winner == team2
-    # else:
-    # t1_stat = int(team_stats.Rank[team_stats.Team == team1])
-    #     t2_stat = int(team_stats.Rank[team_stats.Team == team2])
 
-    #Using the maximum function of numpy,  compare the stats, if equals one then return the team that corresponds to the stat
+    # Using the maximum function of numpy,  compare the stats, if equals one then return the team that corresponds to the stat
     if np.maximum(t1, t2) == t1:
         winner = team1
 
@@ -72,60 +62,50 @@ ini_round = []
 ini_round_mw = []
 ini_round_e = []
 ini_round_w = []
+swt_16_second = []
+swt_16_first = []
 
+temp_hold = []
 
 def printrd(rdlist):
     i = 0
+
     while i < len(rdlist):
         print(rdlist[i])
         i += 1
-def FinalRound(round):
-    holdrd = 0
-    holdrd.append(round)
 
-    return holdrd
+
+def appendlist(rd, rdlist):
+    i = 0
+    while i < len(rdlist):
+        rd.append(rdlist[i])
+        i += 1
+    return rd
+
 
 def getRound(ini_round, reg):
-
-    final_fr = []
-    elite_round = []
-    count = float(len(ini_round) / 2)
+    thd_rd = []
     i = 0
-    print((reg).upper())
-    print("============")
-    while count > 0:
-        if count == 3.0:
-            print("Third Round")
-            for i in range(0, len(ini_round) - 1):
-                print(getCompare(ini_round[i], ini_round[i + 1]))
-        if count == 1.5:
-            print('\n')
-            print("Sweet 16")
-            for i in range(0, len(ini_round) - 1):
-                print(getCompare(ini_round[i], ini_round[i + 1]))
-        # if count == 0.75:
-        #     print('\n')
-        #     print("Elite 8")
-        #     for i in range(0, len(ini_round) - 1):
-        #        # print(getCompare(ini_round[i], ini_round[i + 1]))
-        #        elite_round.append(getCompare(ini_round[i], ini_round[i + 1]))
-        i += 1
-        count = count / 2
+
+    while i < len(ini_round) - 1:
+        thd_rd.append(getCompare(ini_round[i], ini_round[i + 1]))
+        i = i + 2
+
+    return thd_rd
 
 
 for div, team in divisions.items():
-
     if div == 'MW':
         ini_round_mw.append(getCompare(team[0], team[15]))
         ini_round_mw.append(getCompare(team[7], team[8]))
         ini_round_mw.append(getCompare(team[4], team[11]))
         ini_round_mw.append(getCompare(team[3], team[12]))
         ini_round_mw.append(getCompare(team[5], team[10]))
-        ini_round_mw.append(getCompare(team[2], team[14]))
-        print("Midwest- 2nd Rd")
+        ini_round_mw.append(getCompare(team[2], team[13]))
+        ini_round_mw.append(getCompare(team[6], team[9]))
+        ini_round_mw.append(getCompare(team[1], team[14]))
+        print('\n' +"Midwest-Second Round".upper())
         printrd(ini_round_mw)
-        getRound(ini_round_mw, "Midwest")
-
 
     if div == 'W':
         ini_round_w.append(getCompare(team[0], team[15]))
@@ -133,9 +113,11 @@ for div, team in divisions.items():
         ini_round_w.append(getCompare(team[4], team[11]))
         ini_round_w.append(getCompare(team[3], team[12]))
         ini_round_w.append(getCompare(team[5], team[10]))
-        ini_round_w.append(getCompare(team[2], team[14]))
+        ini_round_w.append(getCompare(team[2], team[13]))
+        ini_round_w.append(getCompare(team[6], team[9]))
+        ini_round_w.append(getCompare(team[1], team[14]))
+        print('\n' +"West-Second Round".upper())
         printrd(ini_round_w)
-        getRound(ini_round_w, "West")
 
     if div == 'E':
         ini_round_e.append(getCompare(team[0], team[15]))
@@ -143,11 +125,11 @@ for div, team in divisions.items():
         ini_round_e.append(getCompare(team[4], team[11]))
         ini_round_e.append(getCompare(team[3], team[12]))
         ini_round_e.append(getCompare(team[5], team[10]))
-        ini_round_e.append(getCompare(team[2], team[14]))
-        # print("East - 2rd Rd")
-        # printrd(ini_round_e)
-        getRound(ini_round_e, "East")
-
+        ini_round_e.append(getCompare(team[2], team[13]))
+        ini_round_e.append(getCompare(team[6], team[9]))
+        ini_round_e.append(getCompare(team[1], team[14]))
+        print('\n' + "East-Second Round".upper())
+        printrd(ini_round_e)
 
     if div == 'S':
         ini_round.append(getCompare(team[0], team[15]))
@@ -155,13 +137,38 @@ for div, team in divisions.items():
         ini_round.append(getCompare(team[4], team[11]))
         ini_round.append(getCompare(team[3], team[12]))
         ini_round.append(getCompare(team[5], team[10]))
-        ini_round.append(getCompare(team[2], team[14]))
-        # print("South - 2rd Rd")
-        # printrd(ini_round)
-        getRound(ini_round, "South")
+        ini_round.append(getCompare(team[2], team[13]))
+        ini_round.append(getCompare(team[6], team[9]))
+        ini_round.append(getCompare(team[1], team[14]))
+
+        print('\n' + "South-Second Round".upper())
+        printrd(ini_round)
+
+swt_16_first = appendlist(swt_16_first, getRound(ini_round_mw, "Midwest"))
+swt_16_second = appendlist(swt_16_second, getRound(ini_round_e, "East"))
+swt_16_first = appendlist(swt_16_first, getRound(ini_round_w, "West"))
+swt_16_second = appendlist(swt_16_second, getRound(ini_round, "South"))
+
+print('\n' + "Sweet Sixteen".upper())
+printrd(swt_16_first)
+printrd(swt_16_second)
+
+print('\n' + "Elite 8".upper())
+elite_1 = getRound(swt_16_first, "")
+elite_2 = getRound(swt_16_second, "")
+printrd(elite_1)
+printrd(elite_2)
+print('\n' + "Final Four".upper())
+final_fr_1 = getRound(elite_1, "")
+final_fr_2 = getRound(elite_2, "")
+
+print("%s vs %s" %(final_fr_1[0], final_fr_1[1]))
+print("%s vs %s" %(final_fr_2[0], final_fr_2[1]))
 
 
+champ_1 = getRound(final_fr_1, "")
+champ_2 = getRound(final_fr_2, "")
+print("\nChampionship is %s vs %s" %(champ_1[0], champ_2[0]))
+winner = getCompare(champ_1[0], champ_2[0])
 
-
-
-
+print ("Winner is: %s" % winner)
